@@ -3,7 +3,9 @@
 To start:
 
 Create a venv
-```python3 -m venv venv
+```
+python3 -m venv venv
+
 ```
 
 - Navigate to the directory containing this README
