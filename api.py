@@ -11,7 +11,7 @@ CORS(app, origins=['http://localhost:3000', 'https://shiny-malabi-e40d14.netlify
 
 @app.route("/", methods=['GET'])
 def index():
-    return 'Countries'
+    return 'Countries!'
 
 @app.route('/create-account', methods=['POST'])
 def set_username_and_password():
