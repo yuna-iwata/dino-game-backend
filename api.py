@@ -17,8 +17,8 @@ def set_username_and_password():
     hashed_password = bcrypt.hashpw(password, salt).decode('utf8')
     try:
         query = insert(
-            """INSERT INTO users (username, hashed_password, dino_id) 
-            VALUES (%s, %s, 1);""", 
+            """INSERT INTO users (username, hashed_password) 
+            VALUES (%s, %s);""", 
             (username, hashed_password)
             )
         print(query)
