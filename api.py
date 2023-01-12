@@ -9,10 +9,6 @@ app = Flask(__name__)
 
 CORS(app, origins=['http://localhost:3000', 'https://shiny-malabi-e40d14.netlify.app'], supports_credentials=True, with_credentials=True)
 
-@app.route("/", methods=['GET'])
-def index():
-    return 'Countries Application'
-
 @app.route('/create-account', methods=['POST'])
 def set_username_and_password():
     data = request.json
