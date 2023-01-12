@@ -1,10 +1,10 @@
 import psycopg2
 import psycopg2.extras as pse  # We'll need this to convert SQL responses into dictionaries
 from flask import Flask, current_app, request, jsonify
-from flask_cors import CORS
+# from flask_cors import CORS
 
 app=Flask(__name__)
-CORS(app)
+# CORS(app)
 
 def get_db_connection():
     try:
