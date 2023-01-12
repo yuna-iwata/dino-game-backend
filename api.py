@@ -1,3 +1,4 @@
+
 from flask import Flask, request
 from db_interactions import select, insert
 import bcrypt
@@ -5,6 +6,7 @@ from flask import jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
+
 
 CORS(app, origins='http://localhost:3000', supports_credentials=True, with_credentials=True)
 
