@@ -1,4 +1,3 @@
-
 from flask import Flask, request
 from db_interactions import select, insert, delete
 import bcrypt
@@ -11,7 +10,7 @@ CORS(app, origins=['http://localhost:3000', 'https://shiny-malabi-e40d14.netlify
 
 @app.route("/", methods=['GET'])
 def index():
-    return 'Countries'
+    return 'Dino'
 
 @app.route('/create-account', methods=['POST'])
 def set_username_and_password():
@@ -55,7 +54,7 @@ def deleteAccount():
     username = data["username"]
     query = delete(
         """DELETE FROM users
-        WHERE username=%s IN (row_1, row_2, ..., row_N);""",
+        WHERE username=%s""",
         (username,)
         )
     return {"status": query[0], "code": query[1]}
