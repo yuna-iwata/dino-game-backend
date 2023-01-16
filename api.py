@@ -18,10 +18,8 @@ def submit_score():
     data = request.json
     username = data["username"]
     score = data["score"]
-    print('score',score)
     userid = select("SELECT user_id FROM users WHERE username = %s", (username,))
     formatuserid = userid[0][0]
-    print(userid[0][0])
     query = insert(
         """INSERT INTO scores (user_id, score, date) 
         VALUES (%s, %s, current_timestamp);""", 
