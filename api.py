@@ -19,7 +19,7 @@ def submit_score():
     username = data["username"]
     score = data["score"]
     user_id = select("SELECT user_id FROM users WHERE username = %s", (username,))
-    format_user_id = userid[0][0]
+    format_user_id = user_id[0][0]
     query = insert(
         """INSERT INTO scores (user_id, score, date) 
         VALUES (%s, %s, current_timestamp);""", 
