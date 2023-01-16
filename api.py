@@ -1,5 +1,5 @@
 from flask import Flask, request
-from db_interactions import select, insert, delete
+from db_interactions import select, insert, delete, update
 import bcrypt
 from flask import jsonify
 from flask_cors import CORS
@@ -58,4 +58,31 @@ def deleteAccount():
         (username,)
         )
     return {"status": query[0], "code": query[1]}
-    
+
+
+@app.route('/change-password', methods=['POST'])
+def change_password():
+    data = request.json
+    username = data["username"]
+    check_pw_query = select(
+        """SELECT (hashed_password) FROM users
+        WHERE username = %s""",
+        (username,)
+        )
+    old_password = data["oldPassword"].encode('utf8')
+    new_password = data["newPassword"].encode('utf8')
+    current_hashed_password = check_pw_query[0][0].encode('utf8')
+    if bcrypt.checkpw(old_password, current_hashed_password):
+        salt = bcrypt.gensalt()
+        new_hashed_password = bcrypt.hashpw(new_password, salt).decode('utf8')
+        update(
+            """UPDATE users
+            SET hashed_password = %s
+            WHERE username = %s;""",
+            (new_hashed_password, username)
+            )
+        return_data = {"match": True, "status": 'success', "code": 200}
+        return jsonify(return_data)
+    else:
+        return_data = {"match": False, "status": 'Unauthorised - incorrect password', "code": 400}
+        return jsonify(return_data)
