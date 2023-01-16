@@ -23,7 +23,7 @@ def submit_score():
     query = insert(
         """INSERT INTO scores (user_id, score, date) 
         VALUES (%s, %s, current_timestamp);""", 
-        (formatuserid,score))
+        (format_user_id,score))
     return {"status": query[0], "code": query[1]}
 
 @app.route('/create-account', methods=['POST'])
