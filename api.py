@@ -69,10 +69,10 @@ def change_password():
         WHERE username = %s""",
         (username,)
         )
-    confirm_password = data["confirmPassword"].encode('utf8')
+    old_password = data["oldPassword"].encode('utf8')
     new_password = data["newPassword"].encode('utf8')
     current_hashed_password = check_pw_query[0][0].encode('utf8')
-    if bcrypt.checkpw(confirm_password, current_hashed_password):
+    if bcrypt.checkpw(old_password, current_hashed_password):
         salt = bcrypt.gensalt()
         new_hashed_password = bcrypt.hashpw(new_password, salt).decode('utf8')
         update(
