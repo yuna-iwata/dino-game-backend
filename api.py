@@ -32,7 +32,7 @@ def check_username_and_password():
     data = request.json
     username = data["username"]
     query = select(
-        """SELECT (hashed_password) FROM users
+        """SELECT hashed_password, dino_id FROM users
         WHERE username = %s""",
         (username,)
         )
@@ -42,7 +42,8 @@ def check_username_and_password():
     if len(query) == 0:
         return jsonify({"status": "No matching user found", "code": 404})
     elif bcrypt.checkpw(entered_password, hashed_password):
-        return_data = {"match": True, "status": 'success', "code": 200}
+        dino_id = query[0][1]
+        return_data = {"match": True, "status": 'success', "code": 200, "dino_id": dino_id}
         return jsonify(return_data)
     else:
         return_data = {"match": False, "status": 'Unauthorised', "code": 401}
@@ -116,5 +117,27 @@ def change_username():
         return_data = {"match": True, "status": 'success', "code": 200}
         return jsonify(return_data)
     else:
-        return_data = {"match": False, "status": 'Unauthorised - incorrect password', "code": 401}
+        return_data = {"match": False, "status": "Unauthorised - incorrect password", "code": 401}
         return jsonify(return_data)
+
+@app.route('/change-avatar', methods=['POST'])
+def change_avatar():
+    data = request.json
+    username = data['username']
+    avatar = data['newAvatar']
+
+    change_avatar_query = update(
+        """UPDATE users 
+        SET dino_id = %s
+        WHERE username = %s""",
+        (avatar, username)
+    )
+
+    if change_avatar_query[1] == 200:
+        return_data = {"match": True, "status": "success", "code": 200}
+        return jsonify(return_data)
+    else:
+        return_data = {"match": False, "status": "internal server error", "code": 500}
+        return jsonify(return_data)
+
+
