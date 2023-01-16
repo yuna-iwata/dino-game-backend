@@ -39,7 +39,11 @@ def delete(query, params=()):
     return "Error deleting data", 500
 
 def update(query, params=()):
+  try:
     conn = get_db_connection()
     with conn.cursor() as cur:
       cur.execute(query, params)
       conn.commit()
+    return "Update completed.", 200
+  except:
+    return "Error updating data", 500
