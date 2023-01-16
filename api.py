@@ -45,7 +45,7 @@ def check_username_and_password():
         return_data = {"match": True, "status": 'success', "code": 200}
         return jsonify(return_data)
     else:
-        return_data = {"match": False, "status": 'Unauthorised', "code": 400}
+        return_data = {"match": False, "status": 'Unauthorised', "code": 401}
         return jsonify(return_data)
 
 @app.route('/delete-account', methods=['DELETE'])
@@ -84,5 +84,37 @@ def change_password():
         return_data = {"match": True, "status": 'success', "code": 200}
         return jsonify(return_data)
     else:
-        return_data = {"match": False, "status": 'Unauthorised - incorrect password', "code": 400}
+        return_data = {"match": False, "status": 'Unauthorised - incorrect password', "code": 401}
+        return jsonify(return_data)
+
+@app.route('/change-username', methods=['POST'])
+def change_username():
+    data = request.json
+    old_username = data["oldUsername"]
+    check_pw_query = select(
+        """SELECT (hashed_password) FROM users
+        WHERE username = %s""",
+        (old_username,)
+        )
+    entered_password = data["password"].encode('utf8')
+    new_username = data["newUsername"]
+    current_hashed_password = check_pw_query[0][0].encode('utf8')
+    search_new_username_query = select(
+        """SELECT (username) FROM users
+        WHERE username = %s""", (new_username,)
+        )
+    if len(search_new_username_query) == 1:
+        return_data = {"match": False, "status": 'Unauthorised - username already exists', "code": 409}
+        return jsonify(return_data)
+    if bcrypt.checkpw(entered_password, current_hashed_password):
+        update(
+            """UPDATE users
+            SET username = %s
+            WHERE username = %s;""",
+            (new_username, old_username)
+            )
+        return_data = {"match": True, "status": 'success', "code": 200}
+        return jsonify(return_data)
+    else:
+        return_data = {"match": False, "status": 'Unauthorised - incorrect password', "code": 401}
         return jsonify(return_data)
