@@ -12,6 +12,20 @@ CORS(app, origins=['http://localhost:3000', 'https://shiny-malabi-e40d14.netlify
 def index():
     return 'Dino'
 
+
+@app.route('/submit-score', methods=['POST'])
+def submit_score():
+    data = request.json
+    username = data["username"]
+    score = data["score"]
+    user_id = select("SELECT user_id FROM users WHERE username = %s", (username,))
+    format_user_id = userid[0][0]
+    query = insert(
+        """INSERT INTO scores (user_id, score, date) 
+        VALUES (%s, %s, current_timestamp);""", 
+        (format_user_id,score))
+    return {"status": query[0], "code": query[1]}
+
 @app.route('/create-account', methods=['POST'])
 def set_username_and_password():
     data = request.json
