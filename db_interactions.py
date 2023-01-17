@@ -19,14 +19,14 @@ def insert(query, params=()):
     return "Error inserting data", 500
 
 def select(query, params=()):
-  try:
+  # try:
     conn = get_db_connection()
     with conn.cursor() as cur:
       cur.execute(query, params)
       data = cur.fetchall()
       return data
-  except:
-    return "Error selecting data", 500
+  # except:
+  #   return "Error selecting data", 500
 
 def delete(query, params=()):
   try:
