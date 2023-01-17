@@ -27,12 +27,12 @@ def get_personal_leaderboard():
 @app.route('/global-leaderboard', methods=['GET'])
 def get_global_leaderboard():
     data = select("""SELECT DISTINCT ON (users.user_id) 
-    users.user_id, username,score, date
+    users.user_id, username,score, date, users.dino_id
     FROM scores JOIN users ON users.user_id = scores.user_id
     ORDER BY user_id, score DESC, date;""")
     formatted_data = []
     for i in range(len(data)):
-        each_score = {'name': data[i][1], 'score': data[i][2], 'date': data[i][3] }
+        each_score = {'name': data[i][1], 'score': data[i][2], 'date': data[i][3], 'dino_id': data[i][4]}
         formatted_data.append(each_score)
     return formatted_data, 200, {'Content-Type': 'application/json'}
 
