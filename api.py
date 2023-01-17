@@ -12,7 +12,6 @@ CORS(app, origins=['http://localhost:3000', 'https://shiny-malabi-e40d14.netlify
 def index():
     return 'Dino'
 
-
 @app.route('/personal-leaderboard', methods=['GET'])
 def get_personal_leaderboard():
     username = request.args.get('user', type=str) 
@@ -22,6 +21,18 @@ def get_personal_leaderboard():
     formatted_data = []
     for i in range(len(data)):
         each_score = {'score': data[i][0], 'date': data[i][1] }
+        formatted_data.append(each_score)
+    return formatted_data, 200, {'Content-Type': 'application/json'}
+
+@app.route('/global-leaderboard', methods=['GET'])
+def get_global_leaderboard():
+    data = select("""SELECT DISTINCT ON (users.user_id) 
+    users.user_id, username,score, date
+    FROM scores JOIN users ON users.user_id = scores.user_id
+    ORDER BY user_id, score DESC, date;""")
+    formatted_data = []
+    for i in range(len(data)):
+        each_score = {'name': data[i][1], 'score': data[i][2], 'date': data[i][3] }
         formatted_data.append(each_score)
     return formatted_data, 200, {'Content-Type': 'application/json'}
 
