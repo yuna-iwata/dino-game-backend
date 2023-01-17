@@ -17,8 +17,8 @@ def index():
 def get_personal_leaderboard():
     username = request.args.get('user', type=str) 
     data = select("""SELECT score, date, username FROM scores 
-    JOIN users ON  users.user_id = scores.user_id 
-    WHERE username =  %s""",(username,))
+    JOIN users ON users.user_id = scores.user_id 
+    WHERE username = %s""",(username,))
     formatted_data = []
     for i in range(len(data)):
         each_score = {'score': data[i][0], 'date': data[i][1] }
