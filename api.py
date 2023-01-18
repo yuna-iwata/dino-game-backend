@@ -91,9 +91,12 @@ def deleteAccount():
     data = request.json
     username = data["username"]
     query = delete(
-        """DELETE FROM users
+        """DELETE FROM scores
+        WHERE user_id = (SELECT user_id FROM users WHERE username=%s);
+
+        DELETE FROM users
         WHERE username=%s""",
-        (username,)
+        (username, username)
         )
     return {"status": query[0], "code": query[1]}
 
