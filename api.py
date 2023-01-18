@@ -26,8 +26,7 @@ def get_personal_leaderboard():
 
 @app.route('/global-leaderboard', methods=['GET'])
 def get_global_leaderboard():
-    data = select("""SELECT DISTINCT ON (users.user_id) 
-    users.user_id, username,score, date, users.dino_id
+    data = select("""SELECT users.user_id, username,score, date, users.dino_id
     FROM scores JOIN users ON users.user_id = scores.user_id
     ORDER BY user_id, score DESC, date;""")
     formatted_data = []
