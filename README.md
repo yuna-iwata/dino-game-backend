@@ -12,7 +12,7 @@ python3 -m venv venv
 source ./venv/bin/activate
 ```
 
-Next, run
+To install the required packages, run
 
 ```
 pip3 install -r requirements.txt
