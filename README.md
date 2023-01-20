@@ -1,4 +1,4 @@
-# Dinosaur game Flask API
+# 🦖Dino game Flask API🦖
 
 An api for mediating requests for the dinosaur game at https://github.com/yuna-iwata/dino-frontend-v2. 
 
