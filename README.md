@@ -38,13 +38,13 @@ POST - set_username_and_password: (http://localhost:5000/create-account) + body 
 
 POST - check_username_and_password: (http://localhost:5000/login) + body containing username and password
 
-POST - change_password: (http://localhost:5000/delete-account) + body containing username, oldPassword and newPassword
+POST - change_password: (http://localhost:5000/change-password) + body containing username, oldPassword and newPassword
 
-POST - change_username: (http://localhost:5000/change-password) + body containing oldUsername, newUsername and password
+POST - change_username: (http://localhost:5000/change-username) + body containing oldUsername, newUsername and password
 
-POST - change_avatar: (http://localhost:5000/change-username) + body containing username and newAvatar
+POST - change_avatar: (http://localhost:5000/change-avatar) + body containing username and newAvatar
 
-DELETE - delete_account: (http://localhost:5000/change-avatar) + body containing username
+DELETE - delete_account: (http://localhost:5000/delete-account) + body containing username
 
 #### Leaderboard Api:
 
