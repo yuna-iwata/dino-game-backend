@@ -26,11 +26,12 @@ flask run
 Rest Api 
 -----
 
-#### Test Api
+#### Test Api: 
+to ensure the api is up and running: should display the text 'Dino' 
 
 GET - test: (http://localhost:5000/)
 
-#### Users Api
+#### Users Api:
 
 POST - set_username_and_password: (http://localhost:5000/create-account) + body containing username and password
 
@@ -44,7 +45,7 @@ POST - change_avatar: (http://localhost:5000/change-username) + body containing 
 
 DELETE - delete_account: (http://localhost:5000/change-avatar) + body containing username
 
-#### Leaderboard Api
+#### Leaderboard Api:
 
 GET - get_personal_leaderboard: (http://localhost:5000/personal-leaderboard)
 
