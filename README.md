@@ -1,6 +1,7 @@
 # 🦖Dino game Flask API🦖
 
 An api for mediating requests for the dinosaur game at https://github.com/yuna-iwata/dino-frontend-v2. 
+View the running API here: https://the-dino-game-api.herokuapp.com/
 
 ## Running the app
 
