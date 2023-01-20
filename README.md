@@ -48,8 +48,8 @@ DELETE - delete_account: (http://localhost:5000/delete-account) + body containin
 
 #### Leaderboard Api:
 
-GET - get_personal_leaderboard: (http://localhost:5000/personal-leaderboard?user={insert username here})
+GET - get_personal_leaderboard: (http://localhost:5000/personal-leaderboard?user={insert-username-here})
 
-GET - get_global_leaderboard: (http://localhost:5000/global-leaderboard?name={username})
+GET - get_global_leaderboard: (http://localhost:5000/global-leaderboard)
 
 POST - submit_score: (http://localhost:5000/submit-score) + body containing username and score
