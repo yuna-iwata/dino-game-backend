@@ -179,4 +179,16 @@ def change_avatar():
         return_data = {"match": False, "status": "internal server error", "code": 500}
         return jsonify(return_data)
 
+@app.route('/check-user-exists', methods=['GET'])
+def check_user_exists():
+    username = request.args.get('user', type=str) 
+    data = select("""SELECT username FROM users 
+    WHERE username = %s""",(username,))
+    return data, 200, {'Content-Type': 'application/json'}
 
+@app.route('/user-avatar', methods=['GET'])
+def get_avatar():
+    username = request.args.get('user', type=str) 
+    data = select("""SELECT dino_id FROM users 
+    WHERE username = %s""",(username,))
+    return data, 200, {'Content-Type': 'application/json'}
