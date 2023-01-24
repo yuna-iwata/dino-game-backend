@@ -17,7 +17,10 @@ def get_personal_leaderboard():
     username = request.args.get('user', type=str) 
     data = select("""SELECT score, date, username FROM scores 
     JOIN users ON users.user_id = scores.user_id 
-    WHERE username = %s""",(username,))
+    WHERE username = %s
+    ORDER BY score DESC, date;""",(username,)
+    )
+
     formatted_data = []
     for i in range(len(data)):
         each_score = {'score': data[i][0], 'date': data[i][1] }
@@ -28,7 +31,7 @@ def get_personal_leaderboard():
 def get_global_leaderboard():
     data = select("""SELECT users.user_id, username,score, date, users.dino_id
     FROM scores JOIN users ON users.user_id = scores.user_id
-    ORDER BY user_id, score DESC, date;""")
+    ORDER BY score DESC;""")
     formatted_data = []
     for i in range(len(data)):
         each_score = {'name': data[i][1], 'score': data[i][2], 'date': data[i][3], 'dino_id': data[i][4]}
