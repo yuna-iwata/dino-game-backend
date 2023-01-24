@@ -29,14 +29,29 @@ def get_personal_leaderboard():
 
 @app.route('/global-leaderboard', methods=['GET'])
 def get_global_leaderboard():
-    data = select("""SELECT users.user_id, username,score, date, users.dino_id
+    data = select("""SELECT username, score, dino_id
     FROM scores JOIN users ON users.user_id = scores.user_id
     ORDER BY score DESC;""")
     formatted_data = []
     for i in range(len(data)):
-        each_score = {'name': data[i][1], 'score': data[i][2], 'date': data[i][3], 'dino_id': data[i][4]}
+        each_score = {'name': data[i][0], 'score': data[i][1], 'dinoId': data[i][2]}
         formatted_data.append(each_score)
     return formatted_data, 200, {'Content-Type': 'application/json'}
+
+@app.route('/get-rank', methods=['GET'])
+def get_rank():
+    data = select("""SELECT username FROM (
+        SELECT DISTINCT ON (username) *
+        FROM scores JOIN users ON users.user_id = scores.user_id
+        ORDER BY username, score DESC
+        ) t
+        ORDER BY score DESC;
+        """)
+    username = request.args.get('user', type=str)
+    rank = [i+1 for (i, user) in enumerate(data) if user[0] == username]
+    print(rank)
+
+    return rank, 200, {'Content-Type': 'application/json'}
 
 @app.route('/submit-score', methods=['POST'])
 def submit_score():
