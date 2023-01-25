@@ -49,7 +49,6 @@ def get_rank():
         """)
     username = request.args.get('user', type=str)
     rank = [i+1 for (i, user) in enumerate(data) if user[0] == username]
-    print(rank)
 
     return rank, 200, {'Content-Type': 'application/json'}
 
@@ -104,16 +103,20 @@ def check_username_and_password():
         return jsonify(return_data)
 
 @app.route('/delete-account', methods=['DELETE'])
-def deleteAccount():
+def delete_account():
     data = request.json
     username = data["username"]
+    print(username)
     query = delete(
         """DELETE FROM scores
         WHERE user_id = (SELECT user_id FROM users WHERE username=%s);
 
+        DELETE FROM sessions
+        WHERE user_id = (SELECT user_id FROM users WHERE username=%s);
+
         DELETE FROM users
-        WHERE username=%s""",
-        (username, username)
+        WHERE username=%s;""",
+        (username, username, username)
         )
     return {"status": query[0], "code": query[1]}
 
@@ -210,3 +213,36 @@ def get_avatar():
     data = select("""SELECT dino_id FROM users 
     WHERE username = %s""",(username,))
     return data, 200, {'Content-Type': 'application/json'}
+
+@app.route('/set-session', methods=['POST'])
+def set_session_id():
+    data = request.json
+    username = data['username']
+    session_id = data['sessionId']
+    query = insert("""INSERT INTO sessions (uuid, created_at, user_id) 
+        VALUES (%s, current_timestamp, (
+            SELECT user_id FROM users
+            WHERE username=%s));""", 
+        (session_id,username))
+    return {"status": query[0], "code": query[1]}
+
+@app.route('/get-session', methods=['GET'])
+def get_session_id():
+    session_id = request.args.get('session', type=str) 
+    user = select("""SELECT username, dino_id FROM users
+    WHERE user_id = (SELECT user_id FROM sessions 
+        WHERE uuid=%s);""", 
+        (session_id,))
+    return user, 200, {'Content-Type': 'application/json'}
+
+@app.route('/delete-session', methods=['DELETE'])
+def delete_session():
+    data = request.json
+    session_id = data["sessionId"]
+    print(session_id)
+    query = delete(
+        """DELETE FROM sessions
+        WHERE uuid=%s;""",
+        (session_id,)
+        )
+    return {"status": query[0], "code": query[1]}
