@@ -29,14 +29,12 @@ def select(query, params=()):
     return "Error selecting data", 500
 
 def delete(query, params=()):
-  try:
     conn = get_db_connection()
     with conn.cursor() as cur:
       cur.execute(query, params)
       conn.commit()
     return "Deletion completed.", 200
-  except:
-    return "Error deleting data", 500
+
 
 def update(query, params=()):
   try:
