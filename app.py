@@ -57,12 +57,18 @@ def submit_score():
     data = request.json
     username = data["username"]
     score = data["score"]
+    items = data["items"]
     user_id = select("SELECT user_id FROM users WHERE username = %s", (username,))
+    max_item = select("SELECT MAX(items) FROM scores WHERE user_id=%s", user_id[0])
+    if int(items)>max_item[0][0]:
+        item_num = items
+    else:
+        item_num = max_item[0][0]
     format_user_id = user_id[0][0]
     query = insert(
-        """INSERT INTO scores (user_id, score, date) 
-        VALUES (%s, %s, current_timestamp);""", 
-        (format_user_id,score))
+        """INSERT INTO scores (user_id, score, date, items) 
+        VALUES (%s, %s, current_timestamp, %s);""", 
+        (format_user_id,score,item_num))
     return {"status": query[0], "code": query[1]}
 
 @app.route('/create-account', methods=['POST'])
