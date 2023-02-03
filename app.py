@@ -59,9 +59,7 @@ def submit_score():
     score = data["score"]
     items = data["items"]
     user_id = select("SELECT user_id FROM users WHERE username = %s", (username,))
-    print(user_id)
     max_item = select("SELECT MAX(items) FROM scores WHERE user_id=%s", user_id[0])
-    print('print',max_item)
     if int(items)>max_item[0][0]:
         item_num = items
     else:
