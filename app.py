@@ -60,16 +60,11 @@ def submit_score():
     score = data["score"]
     items = data["items"]
     user_id = select("SELECT user_id FROM users WHERE username = %s", (username,))
-    max_item = select("SELECT MAX(items) FROM scores WHERE user_id=%s", user_id[0])
-    if int(items)>max_item[0][0]:
-        item_num = items
-    else:
-        item_num = max_item[0][0]
     format_user_id = user_id[0][0]
     query = insert(
         """INSERT INTO scores (user_id, score, date, items) 
         VALUES (%s, %s, current_timestamp, %s);""", 
-        (format_user_id,score,item_num))
+        (format_user_id,score,items))
     return {"status": query[0], "code": query[1]}
 
 @app.route('/create-account', methods=['POST'])
@@ -218,6 +213,13 @@ def check_user_exists():
 def get_avatar():
     username = request.args.get('user', type=str) 
     data = select("""SELECT dino_id FROM users 
+    WHERE username = %s""",(username,))
+    return data, 200, {'Content-Type': 'application/json'}
+
+@app.route('/unlocked-avatars', methods=['GET'])
+def get_unlocked_avatars():
+    username = request.args.get('user', type=str) 
+    data = select("""SELECT MAX(items) FROM scores JOIN users ON scores.user_id=users.user_id
     WHERE username = %s""",(username,))
     return data, 200, {'Content-Type': 'application/json'}
 
